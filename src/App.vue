@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <loading :loading="loadingOptions"></loading>
-    <router-view/>
+    <router-view v-if="!loadingOptions.showLoading"/>
   </div>
 </template>
 
 <script>
-import loading from '@/components/loading.vue'
+import loading from '@/components/loading.vue';
 
 export default {
   name: 'Skeleton',
@@ -28,11 +28,18 @@ export default {
   },
   created () {
 
+  },
+  computed: {
+    state () {
+
+    }
   }
 }
 </script>
 
 <style>
+@import './assets/css/main.scss';
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
