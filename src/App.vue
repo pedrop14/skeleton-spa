@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-    <loading :loading="loadingOptions"></loading>
-    <router-view v-if="!loadingOptions.showLoading"/>
+    <loading :loading="state"></loading>
+    <router-view v-if="!state.showLoading"/>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import loading from '@/components/loading.vue';
 
 export default {
@@ -15,12 +16,6 @@ export default {
   },
   data () {
     return {
-      loadingOptions: {
-        showLoading: true,
-        text: 'Carregando...',
-        height: 30,
-        width: 30
-      }
     }
   },
   mounted () {
@@ -29,11 +24,9 @@ export default {
   created () {
 
   },
-  computed: {
-    state () {
-
-    }
-  }
+  computed: mapGetters({
+    state: 'loadingState'
+  })
 }
 </script>
 

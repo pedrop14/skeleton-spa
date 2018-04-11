@@ -1,21 +1,33 @@
+/*
+example vuex https://github.com/vuejs/vuex/tree/dev/examples/shopping-cart
+*/
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+/* modules */
+import loadingModule from './modules/loading.js'
+import loginModule from './modules/login.js'
+
 Vue.use(Vuex)
 
- const store = new Vuex.Store({
-  state: {
-    count: 0
-  },
-  mutations: {
+const store = new Vuex.Store({
+	modules: {
+		loading: loadingModule,
+		login: loginModule
+	}
+  // state: {
+  //   count: 0
+  // },
+  // mutations: {
 
-  }, /* mutations */
-  actions: {
+  // },  mutations 
+  // actions: {
 
-  }, /* actions */
-  getters: {
+  // }, /* actions */
+  // getters: {
 
-  }/* getters */
+  // }/* getters */
 })
 
- export default store;
+export default store;
