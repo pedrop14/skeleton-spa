@@ -34,7 +34,6 @@ export default {
   },
   created () {
     // this.$store.dispatch()
-    console.log('existe')
   },
   computed: mapGetters({
     state: 'loginState'

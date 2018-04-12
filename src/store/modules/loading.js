@@ -1,18 +1,29 @@
 // initial state
 const state = {
-	showLoading: true,
-	text: 'Carregando...',
-	height: 30,
-	width: 30
+	all: {
+		showLoading: true,
+		text: 'Carregando...',
+		height: 30,
+		width: 30
+	}
 }
 
 // getters
 const getters = {
-	loadingState: state => state
+	loadingState: state => state.all
 }
 
 // actions
 const actions = {
+	removeLoadingAction () {
+		let payload = {
+			showLoading: false,
+			text: 'Carregando...',
+			height: 30,
+			width: 30
+		};
+		this.commit('removeLoadingMutation', payload);
+	}
   // getAllProducts ({ commit }) {
   //   shop.getProducts(products => {
   //     commit('setProducts', products)
@@ -22,9 +33,10 @@ const actions = {
 
 // mutations
 const mutations = {
-  // setProducts (state, products) {
-  //   state.all = products
-  // },
+	removeLoadingMutation (state, payload) {
+		console.log('mutation remove loading', payload)
+		state.all = payload;
+	}
 
   // decrementProductInventory (state, { id }) {
   //   const product = state.all.find(product => product.id === id)

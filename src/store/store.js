@@ -12,6 +12,7 @@ import loginModule from './modules/login.js'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+	strict: true,
 	modules: {
 		loading: loadingModule,
 		login: loginModule

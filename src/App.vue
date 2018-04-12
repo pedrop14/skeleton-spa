@@ -22,7 +22,10 @@ export default {
 
   },
   created () {
-
+    var vm = this;
+    setTimeout(()=> {
+      vm.$store.dispatch('removeLoadingAction')
+    }, 1500);
   },
   computed: mapGetters({
     state: 'loadingState'
