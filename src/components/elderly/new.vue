@@ -91,8 +91,8 @@
                         <label>Nome do Cuidador</label>
                     </div>
                 </div>
-                <button type="submit" class="btn">Submit</button>
-                <router-link to="/elderly" class="btn grey">Cancel</router-link>
+                <button type="submit" class="btn">Salvar</button>
+                <router-link to="/elderly" class="btn grey">Cancelar</router-link>
             </form>
         </div>
     </div> 
@@ -128,6 +128,12 @@ export default {
         name: null
       }
     };
+  },
+  created() {
+    $(document).ready(function() {
+      M.updateTextFields();
+      $("select").formSelect();
+    });
   },
   methods: {
     saveElderly() {

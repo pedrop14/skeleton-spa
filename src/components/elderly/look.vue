@@ -1,10 +1,10 @@
 <template>
-    <div id="edit-elderly">
+    <div id="look-elderly">
+      <h3>{{name}}</h3>
         <ul class="collapsible">
           <li>
             <div class="collapsible-header">Dados Pessoais</div>
             <div class="collapsible-body">
-              <li>Nome: {{name}}</li>
               <li>Cpf: {{cpf}}</li>
               <li>Data de Nascimento: {{born_date}}</li>
             </div>
@@ -29,18 +29,16 @@
         <button @click="deleteElderly" class="btn red">Delete</button>
 
          <div class="fixed-action-btn">
-          <router-link class="btn-floating btn-large orange" 
-          v-bind:to="{ name: 'edit-elderly', params:{_id: id}}">
-            <i class="fa fa-pencil">
-          </i></router-link>
+           <router-link class="btn-floating btn-large orange" :to="{ name: 'edit-elderly', params:{_id: id}}"></router-link>
         </div>
+      
     </div>
 </template>
 
 <script>
 import db from "../db/firebaseInit";
 export default {
-  name: "edit-elderly",
+  name: "look-elderly",
   data() {
     return {
       id: null,
@@ -58,6 +56,12 @@ export default {
         name: null
       }
     };
+  },
+  created() {
+    $(document).ready(function() {
+      $(".fixed-action-btn").floatingActionButton();
+      $('.collapsible').collapsible();
+    });
   },
   beforeRouteEnter: (to, from, next) => {
     db

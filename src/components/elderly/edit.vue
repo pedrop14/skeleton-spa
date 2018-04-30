@@ -130,6 +130,12 @@ export default {
       }
     };
   },
+  created() {
+    $(document).ready(function() {
+      M.updateTextFields();
+      $("select").formSelect();
+    });
+  },
   beforeRouteEnter: (to, from, next) => {
     db
       .collection("elderly")
@@ -216,10 +222,4 @@ export default {
     }
   }
 };
-/*
-$(document).ready(function() {
-  M.updateTextFields();
-  $("select").formSelect();
-});
-*/
 </script>

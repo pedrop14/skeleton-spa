@@ -4,7 +4,7 @@
           <li class="collection-header"><h4>Idosos</h4></li>
           <li class="collection-item" v-for="elderly in elderlies" v-bind:key="elderly.id">
               {{elderly.name}}
-              <router-link class="secondary-content" v-bind:to="{name:'edit-elderly', params: {_id: elderly.id}}">
+              <router-link class="secondary-content" :to="{name:'look-elderly', params: {_id: elderly.id}}">
               <i class="fa fa-eye"></i>
               </router-link>
           </li>
