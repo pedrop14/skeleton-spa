@@ -5,7 +5,7 @@ import Elderlies from '@/components/elderly/all'
 import ElderlyLook from '@/components/elderly/look'
 import ElderlyEdit from '@/components/elderly/edit'
 import ElderlyNew from '@/components/elderly/new'
-import login from '@/pages/login.vue'
+import Caregivers from '@/components/caregiver/all'
 
 Vue.use(Router)
 
@@ -35,6 +35,11 @@ export default new Router({
       path: 'elderly/new',
       name: 'new-elderly',
       component: ElderlyNew
+    },
+    {
+      path: '/caregiver',
+      name: 'view-caregivers',
+      component: Caregivers
     }
   ]
 })
