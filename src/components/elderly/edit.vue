@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import db from "../db/firebaseInit";
+import axios from "axios";
 export default {
   name: "edit-elderly",
   data() {
@@ -137,30 +137,17 @@ export default {
     });
   },
   beforeRouteEnter: (to, from, next) => {
-    db
-      .collection("elderly")
-      .where("id", "==", to.params._id)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          next(vm => {
-            vm.name = doc.data().name;
-            vm.id = doc.data().id;
-            vm.date_born = doc.data().date_born;
-            vm.cpf = doc.data().cpf;
-            vm.sex = doc.data().sex;
-            vm.answerable.name = doc.data().answerable.name;
-            vm.answerable.date_born = doc.data().answerable.date_born;
-            vm.answerable.relation = doc.data().answerable.relation;
-            vm.answerable.cpf = doc.data().answerable.cpf;
-            vm.answerable.address.street = doc.data().answerable.address.street;
-            vm.answerable.address.number = doc.data().answerable.address.number;
-            vm.answerable.address.zip = doc.data().answerable.address.zip;
-            vm.answerable.contact.tel = doc.data().answerable.contact.tel;
-            vm.answerable.contact.email = doc.data().answerable.contact.email;
-            vm.caregiver.id = doc.data().caregiver.id;
-            vm.caregiver.name = doc.data().caregiver.name;
-          });
+    axios
+      .get("http://localhost:3000/elderly/{}".replace("{}", to.params._id))
+      .then(response => {
+        next(vm => {
+          vm.id = response.data._id;
+          vm.name = response.data.name;
+          vm.date_born = response.data.date_born;
+          vm.cpf = response.data.cpf;
+          vm.sex = response.data.sex;
+          vm.answerable = response.data.answerable;
+          vm.caregiver = response.data.caregiver;
         });
       });
   },
@@ -169,56 +156,41 @@ export default {
   },
   methods: {
     fetchData() {
-      db
-        .collection("elderly")
-        .where("id", "==", this.$route.params._id)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.name = doc.data().name;
-            this.id = doc.data().id;
-            this.date_born = doc.data().date_born;
-            this.cpf = doc.data().cpf;
-            this.sex = doc.data().sex;
-            this.answerable.name = doc.data().answerable.name;
-            this.answerable.date_born = doc.data().answerable.date_born;
-            this.answerable.relation = doc.data().answerable.relation;
-            this.answerable.cpf = doc.data().answerable.cpf;
-            this.answerable.address.street = doc.data().answerable.address.street;
-            this.answerable.address.number = doc.data().answerable.address.number;
-            this.answerable.address.zip = doc.data().answerable.address.zip;
-            this.answerable.contact.tel = doc.data().answerable.contact.tel;
-            this.answerable.contact.email = doc.data().answerable.contact.email;
-            this.caregiver.id = doc.data().caregiver.id;
-            this.caregiver.name = doc.data().caregiver.name;
-          });
+      axios
+        .get("http://localhost:3000/caregiver/{}".replace("{}", this.id))
+        .then(response => {
+          this.id = response.data._id;
+          this.name = response.data.name;
+          this.date_born = response.data.date_born;
+          this.cpf = response.data.cpf;
+          this.sex = response.data.sex;
+          this.answerable = response.data.answerable;
+          this.caregiver = response.data.caregiver;
         });
     },
     updateElderly() {
-      db
-        .collection("elderly")
-        .where("id", "==", this.$route.params._id)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            doc.ref
-              .update({
-                name: this.name,
-                id: this.id,
-                date_born: this.date_born,
-                cpf: this.cpf,
-                sex: this.sex,
-                answerable: this.answerable,
-                caregiver: this.caregiver
-              })
-              .then(() => {
-                this.$router.push({
-                  name: "look-elderly",
-                  params: { _id: this.id }
-                });
-              });
-          });
-        });
+      axios
+        .put(
+          "http://localhost:3000/caregiver/{}".replace("{}", this.id),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          },
+          {
+            name: this.name,
+            date_born: this.date_born,
+            cpf: this.cpf,
+            sex: this.sex,
+            answerable: this.answerable,
+            caregiver: this.caregiver
+          }
+        )
+        .then(response => {
+          this.$router.push("/elderly");
+          console.log(response);
+        })
+        .catch(error => console.log(error));
     }
   }
 };

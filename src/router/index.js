@@ -8,6 +8,10 @@ import ElderlyNew from '@/components/elderly/new'
 import Caregivers from '@/components/caregiver/all'
 import CaregiverLook from '@/components/caregiver/look'
 import CaregiverNew from '@/components/caregiver/new'
+import CaregiverEdit from '@/components/caregiver/edit'
+import VisitNew from '@/components/visit/new'
+import Visits from '@/components/visit/all'
+import ConsultNew from '@/components/consult/new'
 
 Vue.use(Router)
 
@@ -29,7 +33,7 @@ export default new Router({
       component: ElderlyLook
     },
     {
-      path: 'elderly/edit/:_id', 
+      path: 'elderly/edit/:_id',
       name: 'edit-elderly',
       component: ElderlyEdit
     },
@@ -49,9 +53,29 @@ export default new Router({
       component: CaregiverLook
     },
     {
-      path:'caregiver/new',
-      name:'new-caregiver',
+      path: 'caregiver/new',
+      name: 'new-caregiver',
       component: CaregiverNew
+    },
+    {
+      path: 'caregiver/edit/:_id',
+      name: 'edit-caregiver',
+      component: CaregiverEdit
+    },
+    {
+      path:'/visit/new',
+      name: 'new-visit',
+      component: VisitNew
+    },
+    {
+      path:'/visit',
+      name:'view-visits',
+      component: Visits
+    },
+    {
+      path:'/consult/new/:_id',
+      name: 'new-consult',
+      component: ConsultNew
     }
   ]
 })

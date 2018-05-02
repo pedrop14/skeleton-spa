@@ -104,6 +104,7 @@ export default {
         .post("http://localhost:3000/caregiver", {
           name: this.name,
           date_born: this.date_born,
+          cpf: this.cpf,
           sex: this.sex,
           address: {
             street: this.address.street,

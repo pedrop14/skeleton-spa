@@ -2,9 +2,10 @@
   <div id="elderlies">
       <ul class="collection with-header">
           <li class="collection-header"><h4>Idosos</h4></li>
-          <li class="collection-item" v-for="elderly in elderlies" v-bind:key="elderly.id">
+          <li class="collection-item" v-for="elderly in elderlies" v-bind:key="elderly._id">
+            <div class="chip">{{elderly._id}}</div>
               {{elderly.name}}
-              <router-link class="secondary-content" :to="{name:'look-elderly', params: {_id: elderly.id}}">
+              <router-link class="secondary-content" :to="{name:'look-elderly', params: {_id: elderly._id}}">
               <i class="fa fa-eye"></i>
               </router-link>
           </li>
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-import db from '../db/firebaseInit'
+import axios from "axios";
 export default {
   name: "elderlies",
   data() {
@@ -26,17 +27,15 @@ export default {
       elderlies: []
     };
   },
-   created () {
-      db.collection('elderly').get().then((querySnapshot) => {
-        this.loading = false
-        querySnapshot.forEach((doc) => {
-          const data = {
-            'id': doc.data().id,
-            'name': doc.data().name
-          }
-          this.elderlies.push(data)
-        })
+  created() {
+    axios
+      .get("http://localhost:3000/elderly")
+      .then(response => {
+        response.data.forEach(element => {
+          this.elderlies.push(element);
+        });
       })
-    }
+      .catch(error => console.log(error));
+  }
 };
 </script>

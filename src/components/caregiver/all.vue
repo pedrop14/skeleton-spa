@@ -3,6 +3,7 @@
       <ul class="collection with-header">
           <li class="collection-header"><h4>Cuidadores</h4></li>
           <li class="collection-item" v-for="caregiver in caregivers" v-bind:key="caregiver.id">
+            <div class="chip">{{caregiver._id}}</div>
               {{caregiver.name}}
               <router-link class="secondary-content" :to="{name:'look-caregiver', params: {_id: caregiver._id}}">
               <i class="fa fa-eye"></i>

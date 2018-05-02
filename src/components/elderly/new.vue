@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import db from "../db/firebaseInit";
+import axios from "axios";
 export default {
   name: "new-elderly",
   data() {
@@ -136,24 +136,43 @@ export default {
     });
   },
   methods: {
+    nextroute() {
+      this.$router.push("/elderly");
+    },
     saveElderly() {
-      db
-        .collection("elderly")
-        .add({
+      axios
+        .post("http://localhost:3000/elderly", {
           name: this.name,
           date_born: this.date_born,
-          cpf: this.cpf,
           sex: this.sex,
-          answerable: this.answerable,
-          caregiver: this.caregiver
+          cpf: this.cpf,
+          answerable: {
+            name: this.answerable.name,
+            date_born: this.answerable.date_born,
+            relation: this.answerable.relation,
+            cpf: this.answerable.cpf,
+            address: {
+              street: this.answerable.address.street,
+              number: this.answerable.address.number,
+              zip: this.answerable.address.zip
+            },
+            contact: {
+              tel: this.answerable.contact.tel,
+              email: this.answerable.contact.email
+            }
+          },
+          caregiver: {
+            name: this.caregiver.name,
+            id: this.caregiver.id
+          }
         })
-        .then(docRef => {
-          console.log("Elderly added: ", docRef.id);
-          this.$router.push("/elderly");
+        .then(function(response) {
+          console.log("Elderly added");
         })
         .catch(error => {
           console.error("Error adding elderly: ", error);
         });
+      this.nextroute();
     }
   }
 };

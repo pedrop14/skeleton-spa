@@ -6,50 +6,59 @@
             <div class="collapsible-header">Dados Pessoais</div>
             <div class="collapsible-body">
               <li>Cpf: {{cpf}}</li>
-              <li>Data de Nascimento: {{born_date}}</li>
+              <li>Data de Nascimento: {{date_born}}</li>
             </div>
           </li>
           <li>
-            <div class="collapsible-header">Responsável</div>
+            <div class="collapsible-header">Responsável </div>
             <div class="collapsible-body">
               <li class="collection-item">Nome: {{answerable.name}}</li>
               <li class="collection-item">Cpf: {{answerable.cpf}}</li>
-              <li class="collection-item">Telefone: {{answerable.cel}}</li>
-              <li class="collection-item">Endereço: {{answerable.address}}</li>
+              <li class="collection-item">Telefone: {{answerable.contact.tel}}</li>
+              <li class="collection-item">E-mail: {{answerable.contact.email}}</li>
+              <li class="collection-item">Logradouro: {{answerable.address.street}}</li>
+              <li class="collection-item">Número: {{answerable.address.number}}</li>
+              <li class="collection-item">CEP: {{answerable.address.zip}}</li>
             </div>
           </li>
           <li>
-            <div class="collapsible-header">Cuidador</div>
-            <div class="collapsible-body">
-              {{caregiver.name}}
-            </div>
+            <div class="collapsible-header">Cuidador :{{caregiver.name}} </div>
           </li>
         </ul>
-        <router-link to="/elderly" class="btn grey">Back</router-link>
-        <button @click="deleteElderly" class="btn red">Delete</button>
-
-         <div class="fixed-action-btn">
-           <router-link class="btn-floating btn-large orange" :to="{ name: 'edit-elderly', params:{_id: id}}"></router-link>
-        </div>
+        <router-link to="/elderly" class="btn grey lighten-1">Back</router-link>
+        <router-link class="btn orange lighten-1" :to="{ name: 'edit-elderly', params:{_id: id}}">Editar</router-link>
+        <router-link class="btn purple lighten-1" :to="{ name: 'new-consult', params:{_id: id}}">Nova Consulta</router-link>
+        <router-link class="btn green lighten-1" :to="{ name: 'edit-elderly', params:{_id: id}}">Buscar Consultas</router-link>
+        <button @click="deleteElderly" class="btn red lighten-1">Delete</button>
       
     </div>
 </template>
 
 <script>
-import db from "../db/firebaseInit";
+import axios from "axios";
 export default {
   name: "look-elderly",
   data() {
     return {
       id: null,
       name: null,
+      date_born: null,
       cpf: null,
-      born_date: null,
+      sex: null,
       answerable: {
         name: null,
-        address: null,
-        cel: null,
-        cpf: null
+        date_born: null,
+        relation: null,
+        cpf: null,
+        address: {
+          street: null,
+          number: null,
+          zip: null
+        },
+        contact: {
+          tel: null,
+          email: null
+        }
       },
       caregiver: {
         id: null,
@@ -60,24 +69,21 @@ export default {
   created() {
     $(document).ready(function() {
       $(".fixed-action-btn").floatingActionButton();
-      $('.collapsible').collapsible();
+      $(".collapsible").collapsible();
     });
   },
   beforeRouteEnter: (to, from, next) => {
-    db
-      .collection("elderly")
-      .where("id", "==", to.params._id)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          next(vm => {
-            vm.id = doc.data().id;
-            vm.name = doc.data().name;
-            vm.cpf = doc.data().cpf;
-            vm.born_date = doc.data().born_date;
-            vm.answerable = doc.data().answerable;
-            vm.caregiver = doc.data().caregiver;
-          });
+    axios
+      .get("http://localhost:3000/elderly/{}".replace("{}", to.params._id))
+      .then(response => {
+        next(vm => {
+          vm.id = response.data._id;
+          vm.name = response.data.name;
+          vm.date_born = response.data.date_born;
+          vm.cpf = response.data.cpf;
+          vm.sex = response.data.sex;
+          vm.answerable = response.data.answerable;
+          vm.caregiver = response.data.caregiver;
         });
       });
   },
@@ -86,37 +92,25 @@ export default {
   },
   methods: {
     fetchData() {
-      db
-        .collection("elderly")
-        .where("id", "==", this.$route.params._id)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.id = doc.data().id;
-            this.name = doc.data().name;
-            this.cpf = doc.data().cpf;
-            this.born_date = Date(doc.data().born_date);
-            this.answerable.name = doc.data().answerable.name;
-            this.answerable.address = doc.data().answerable.address;
-            this.answerable.cpf = doc.data().answerable.cpf;
-            this.answerable.cel = doc.data().answerable.cel;
-            this.caregiver.id = doc.data().caregiver.id;
-            this.caregiver.name = doc.data().caregiver.name;
-          });
+      axios
+        .get("http://localhost:3000/caregiver/{}".replace("{}", to.params._id))
+        .then(response => {
+          this.id = response.data._id;
+          this.name = response.data.name;
+          this.date_born = response.data.date_born;
+          this.cpf = response.data.cpf;
+          this.sex = response.data.sex;
+          this.answerable = response.data.answerable;
+          this.caregiver = response.data.caregiver;
         });
     },
     deleteElderly() {
       if (confirm("Certeza que deseja excluir?")) {
-        db
-          .collection("elderly")
-          .where("id", "==", this.$route.params._id)
-          .get()
-          .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-              doc.ref.delete();
-              this.$route.push("/");
-            });
-          });
+        axios
+          .delete(
+            "http://localhost:3000/caregiver/{}".replace("{}", to.params._id)
+          )
+          .then(this.$router.push("/elderly"));
       }
     }
   }

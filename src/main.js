@@ -8,6 +8,15 @@ import vueResource from 'vue-resource'
 //Vue.config.productionTip = false
 Vue.use(vueResource)
 
+Vue.directive("auto-focus", {
+  bind: function () {
+    Vue.nextTick(
+      function () {
+        this.el.focus();
+      }.bind(this)
+    );
+  }
+});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
